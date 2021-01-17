@@ -1,0 +1,84 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="create_m_menudescriptor_table" author="Ivanov Roman">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="m_menudescriptor"/>
+            </not>
+        </preConditions>
+        <createTable tableName="m_menudescriptor">
+            <column name="ID" type="NUMBER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(50)"/>
+            <column name="SYSNAME" type="VARCHAR(50)"/>
+            <column name="JSON_MENU" type="VARCHAR(4096)"/>
+            <column name="ROLENAME" type="VARCHAR(50)"/>
+        </createTable>
+        <addPrimaryKey tableName="m_menudescriptor" columnNames="ID"/>
+    </changeSet>
+
+    <changeSet id="fill_m_menudescriptor_data" author="Ivanov Roman">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*)
+                from m_menudescriptor;
+            </sqlCheck>
+        </preConditions>
+        <sql>
+           insert into m_menudescriptor (id, name, sysname, json_menu, rolename)
+            values (1, 'Меню для роли ROOT', 'ROOT_MENU', '{
+            "node-1":{
+            "image":"work-schedule",
+            "name":"Рабочий график",
+            "pathOfDash":"work-schedule",
+            "sysname":"WorkSchedule"
+            },
+            "node-2":{
+            "image":"menu",
+            "name":"Меню",
+            "pathOfDash":"menu",
+            "sysname":"Menu"
+            }
+            }', 'USER')
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-dish-menu" author="Ivanov Roman">
+        <preConditions>
+            <sqlCheck expectedResult="1">
+                select count (*) from m_menudescriptor where sysname = 'ROOT_MENU'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            update m_menudescriptor set json_menu = '{
+            "node-1":{
+            "image":"work-schedule",
+            "name":"Рабочий график",
+            "pathOfDash":"work-schedule",
+            "sysname":"WorkSchedule"
+            },
+            "node-2":{
+            "image":"menu",
+            "name":"Меню",
+            "pathOfDash":"menu",
+            "sysname":"Menu"
+            },
+            "node-3":{
+            "image":"check-mark",
+            "name":"Позиции",
+            "pathOfDash":"dish",
+            "sysname":"Dish"
+            }
+            }' where sysname = 'ROOT_MENU'
+        </sql>
+    </changeSet>
+
+
+
+</databaseChangeLog>
+
