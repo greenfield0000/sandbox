@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestContext {
 
-    private final String url = "https://kladr-api.ru/api.php?";
+    private final String url = "https://kladr-api.ru/api.php?token=rRHsBStEbA4hZeSHG97dG9rEk5FG8SYH";
 
     // Тип возвращаемых объектов (region, district, city, street, building)
     private ContentType contentType;
@@ -33,6 +33,7 @@ public class RequestContext {
     private String withParent = "1";
 
     private String cityId;
+
     private String streetId;
 
     public RequestContext(RequestContext context) {

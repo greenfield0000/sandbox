@@ -7,7 +7,6 @@
         <artifactId>microservices-spring</artifactId>
         <groupId>greenfield.group.com</groupId>
         <version>0.0.1</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>menu-service</artifactId>

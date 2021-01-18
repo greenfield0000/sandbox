@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class JwtTokenService {
 
-    private static final String TOKEN_PREFIX = "Bearer_";
+    private static final String TOKEN_PREFIX = "Bearer ";
     private final String secret = "mySecretTempKey";
     private final long validityInMilliseconds = 3600000;
 

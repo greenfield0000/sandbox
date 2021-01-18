@@ -9,7 +9,7 @@ package greenfield.group.com.gateway.gates.modeldto.kladr.context;
  **/
 public class RequestContext {
 
-    private final String url = "https://kladr-greenfield.group.com.model.ru/greenfield.group.com.model.php?";
+    private final String url = "https://kladr-api.ru/api.php?";
 
     // Тип возвращаемых объектов (region, district, city, street, building)
     private ContentType contentType;
@@ -26,6 +26,9 @@ public class RequestContext {
 
     private String cityId;
     private String streetId;
+
+    public RequestContext() {
+    }
 
     public RequestContext(RequestContext context) {
         if (context != null) {
