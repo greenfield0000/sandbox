@@ -33,9 +33,16 @@ public class MenuService {
                 String roleName = roleList.stream()
                         .findFirst()
                         .get();
-                MenuDescriptor menuDescriptor = menuRepository.findByRoleName(roleName);
+//                MenuDescriptor menuDescriptor = menuRepository.findByRoleName(roleName);
+                // TODO пока роль не создается для пользователя
+                MenuDescriptor menuDescriptor = menuRepository.findByRoleName("USER");
+                log.debug("menuDescriptor = " + menuDescriptor);
                 return menuDescriptor.getJsonMenu();
             }
+            // TODO пока роль не создается для пользователя
+            MenuDescriptor menuDescriptor = menuRepository.findByRoleName("USER");
+            log.debug("menuDescriptor = " + menuDescriptor);
+            return menuDescriptor.getJsonMenu();
         } catch (JwtAuthenticationException e) {
             log.error(e);
         }

@@ -26,4 +26,15 @@ public class MenuDescriptor {
     // TODO пока что такой колхоз ПОПРАВИТЬ на доп. таблицу
     @Column(name = "rolename")
     private String roleName;
+
+    @Override
+    public String toString() {
+        return "MenuDescriptor{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", sysname='" + sysname + '\'' +
+                ", jsonMenu='" + jsonMenu + '\'' +
+                ", roleName='" + roleName + '\'' +
+                '}';
+    }
 }

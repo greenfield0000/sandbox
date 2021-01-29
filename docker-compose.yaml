@@ -4,23 +4,23 @@ services:
   #menu-service
   menu-service:
     container_name: menu-service
-    image: greenfield0000/menu-service:1.0.1
+    image: greenfield0000/menu-service:1.0.2
     ports:
       - "8082:8082"
       - "9082:9082"
-    depends_on:
-      - gateway-service
+    links:
+      - central-db:central-db
 
   #journal-service
   journal-service:
     container_name: journal-service
-    image: greenfield0000/journal-service:1.0.1
+    image: greenfield0000/journal-service:1.0.2
     restart: always
     ports:
       - "8083:8083"
       - "9083:9083"
-    depends_on:
-      - gateway-service
+    links:
+      - central-db:central-db
 
   # fias-kladr-service
   kladr-service:
@@ -36,4 +36,17 @@ services:
     ports:
       - "8080:8080"
       - "9080:9080"
-
+    links:
+      - menu-service:menu-service
+      - journal-service:journal-service
+  
+  central-db:                                                                                                           
+    container_name: central-db                                                                                          
+    image: postgres:9.6                                                                                                 
+    ports:                                                                                                              
+      - "5432:5432"                                                                                                     
+    environment:                                                                                                        
+      - POSTGRES_PASSWORD=admin                                                                                         
+      - POSTGRES_USER=admin                                                                                             
+      - POSTGRES_DB=central-db                                                                                          
+      - PGDATA=/var/lib/postgresql/data/pgdata/central-db
