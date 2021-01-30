@@ -30,7 +30,7 @@ public class RequestContext {
 
     // Если 1, сервис вернёт объекты вместе с родительскими
     // (для района это регион, для населённого пункта район и регион и т.п.)
-    private String withParent = "1";
+    private String withParent = "0";
 
     private String cityId;
 

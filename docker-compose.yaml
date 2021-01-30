@@ -26,7 +26,10 @@ services:
   kladr-service:
     container_name: kladr-service
     restart: always
-    image: greenfield0000/kladr-service:1.0.0
+    image: greenfield0000/kladr-service:1.0.1
+    ports:
+      - "9084:9084"
+
 
   #gateway-service
   gateway-service:
@@ -39,6 +42,7 @@ services:
     links:
       - menu-service:menu-service
       - journal-service:journal-service
+      - kladr-service:kladr-service
   
   central-db:                                                                                                           
     container_name: central-db                                                                                          

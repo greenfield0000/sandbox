@@ -12,5 +12,6 @@ public enum ContentType {
     district,
     city,
     street,
-    building
+    building,
+    streetOwner
 }
