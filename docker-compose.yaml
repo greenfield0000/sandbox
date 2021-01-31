@@ -5,7 +5,7 @@ services:
   gateway-service:
     container_name: gateway-service
     restart: always
-    image: greenfield0000/gateway-service:1.0.0
+    image: greenfield0000/gateway-service:1.0.1
     ports:
       - "8080:8080"
       - "9080:9080"
@@ -17,7 +17,7 @@ services:
   #auth-service
   auth-service:
     container_name: auth-service
-    image: greenfield0000/auth-service:1.0.0
+    image: greenfield0000/auth-service:1.0.5
     ports:
       - "8081:8080"
     links:
@@ -53,7 +53,6 @@ services:
     links:
       - central-db:central-db
    
-
   # fias-kladr-service
   kladr-service:
     container_name: kladr-service

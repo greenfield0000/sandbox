@@ -15,8 +15,21 @@ import java.util.Map;
 /**
  * Гейт для вызова журнальх методов
  */
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
+@CrossOrigin(origins = "http://localhost:4200",
+        allowCredentials = "true",
+        methods = {
+                RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT
+        },
+        allowedHeaders = {
+                "access-control-allow-origin",
+                "origin",
+                "accept",
+                "content-type",
+                "access-control-allow-methods",
+                "authorization"
+        }
+)
 public class JournalGate extends Gate {
 
     @Autowired

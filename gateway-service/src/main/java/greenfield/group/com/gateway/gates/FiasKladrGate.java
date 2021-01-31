@@ -7,8 +7,21 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
+@CrossOrigin(origins = "http://localhost:4200",
+        allowCredentials = "true",
+        methods = {
+                RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT
+        },
+        allowedHeaders = {
+                "access-control-allow-origin",
+                "origin",
+                "accept",
+                "content-type",
+                "access-control-allow-methods",
+                "authorization"
+        }
+)
 public class FiasKladrGate extends Gate {
 
     @Autowired
