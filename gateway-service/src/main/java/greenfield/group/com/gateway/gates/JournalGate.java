@@ -2,14 +2,17 @@ package greenfield.group.com.gateway.gates;
 
 import greenfield.group.com.gatecommon.SimpleResult;
 import greenfield.group.com.gatecommon.Status;
+import greenfield.group.com.gateway.intercaptors.RestTemplateClientHttpRequestInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,7 +59,6 @@ public class JournalGate extends Gate {
             return new SimpleResult(Status.OK, "Вызов метода невозможен");
         }
         params.put("requestMethod", requestMethod);
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", authorization);
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(params, headers);
@@ -65,8 +67,8 @@ public class JournalGate extends Gate {
         switch (requestMethod) {
             case GET: {
                 resultBody = this.restTemplate
-                        .getForEntity(
-                                serviceRegistry.get(gateName) + "/" + methodName, SimpleResult.class, httpEntity
+                        .exchange(
+                                serviceRegistry.get(gateName) + "/" + methodName, HttpMethod.GET, httpEntity, SimpleResult.class, httpEntity
                         )
                         .getBody();
                 break;
@@ -79,12 +81,12 @@ public class JournalGate extends Gate {
             }
             case POST: {
                 resultBody = this.restTemplate
-                        .postForEntity(serviceRegistry.get(gateName) + "/" + methodName, httpEntity, SimpleResult.class)
+                        .exchange(serviceRegistry.get(gateName) + "/" + methodName, HttpMethod.POST, httpEntity, SimpleResult.class)
                         .getBody();
                 break;
             }
             case DELETE: {
-                this.restTemplate
+                resultBody = this.restTemplate
                         .exchange(serviceRegistry.get(gateName) + "/" + methodName, HttpMethod.DELETE, httpEntity, SimpleResult.class)
                         .getBody();
                 break;

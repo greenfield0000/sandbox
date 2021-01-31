@@ -17,7 +17,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private static final String TOKEN_PREFIX = "Bearer_";
+    private static final String TOKEN_PREFIX = "Bearer ";
     private final String secret = "mySecretTempKey";
     private final long validityInMilliseconds = 3600000;
 

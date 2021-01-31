@@ -13,6 +13,7 @@ import greenfield.group.com.journalservice.requests.LoadJournalDataRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -99,12 +100,13 @@ public class JournalServiceImpl implements JournalService {
     /**
      * Общая загрузка данных журнала по системному имени
      *
-     * @param sysName    системное имя журнала
-     * @param pageNumber номер страницы
+     * @param authorizationToken Bearer token
+     * @param sysName            системное имя журнала
+     * @param pageNumber         номер страницы
      * @return возвращает данные журнала
      */
     @Override
-    public JournalDataDTO loadJournalData(String sysName, int pageNumber) {
+    public JournalDataDTO loadJournalData(String authorizationToken, String sysName, int pageNumber) {
         // Загружаем метадату журнала
         JournalMetadataCommonDTO journalMetadata = metaDataLoadJournal(sysName);
         if (journalMetadata != null) {
@@ -115,8 +117,13 @@ public class JournalServiceImpl implements JournalService {
                 if (serviceName != null && gateName != null && !serviceName.isEmpty() && !gateName.isEmpty()) {
                     LoadJournalDataRequest loadJournalDataRequest = new LoadJournalDataRequest();
                     loadJournalDataRequest.setPageNumber(Math.max(pageNumber, 0));
+
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.add("Authorization", authorizationToken);
+                    HttpEntity<LoadJournalDataRequest> httpEntity = new HttpEntity<>(loadJournalDataRequest, headers);
+
                     List loadData = restTemplate
-                            .getForEntity(serviceName + "/" + gateName + "/loadJournal", List.class, loadJournalDataRequest)
+                            .exchange(serviceName + "/" + gateName + "/loadJournal", HttpMethod.GET, httpEntity, List.class)
                             .getBody();
                     if (loadData != null) {
                         return new JournalDataDTO(loadData, pageNumber);
@@ -128,17 +135,17 @@ public class JournalServiceImpl implements JournalService {
     }
 
     @Override
-    public JournalDataDTO doFilter(String journalSysName, List<JournalFilterItemDTO> journalFilterItemDTOList) {
+    public JournalDataDTO doFilter(String authorization, String journalSysName, List<JournalFilterItemDTO> journalFilterItemDTOList) {
         return new JournalDataDTO();
     }
 
     @Override
-    public List<PresetDTO> savePreset(PresetDTO presetDTO) {
+    public List<PresetDTO> savePreset(String authorization, PresetDTO presetDTO) {
         return new ArrayList<>();
     }
 
     @Override
-    public JournalDataDTO doButtonHandler(RequestMethod requestMethod, String journalSysName, String buttonAction, Map<String, Object> entity, int pageNumber) {
+    public JournalDataDTO doButtonHandler(String authorization, RequestMethod requestMethod, String journalSysName, String buttonAction, Map<String, Object> entity, int pageNumber) {
         // Загружаем метадату журнала
         JournalMetadataCommonDTO journalMetadata = metaDataLoadJournal(journalSysName);
         if (journalMetadata != null) {

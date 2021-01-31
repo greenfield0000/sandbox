@@ -12,10 +12,7 @@ import greenfield.group.com.journalservice.response.JournalDataResponse;
 import greenfield.group.com.journalservice.services.JournalServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController(value = "/journal")
 public class JournalGate {
@@ -43,8 +40,11 @@ public class JournalGate {
      * @return
      */
     @RequestMapping(path = "/loadData", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SimpleResult<JournalDataResponse> loadData(@RequestBody LoadJournalRequest loadJournalRequest) {
-        JournalDataDTO journalData = journalServiceImpl.loadJournalData(
+    public SimpleResult<JournalDataResponse> loadData(
+            @RequestHeader(value = "Authorization", defaultValue = "") String authorization,
+            @RequestBody LoadJournalRequest loadJournalRequest
+    ) {
+        JournalDataDTO journalData = journalServiceImpl.loadJournalData(authorization,
                 loadJournalRequest.getJournalSysName(),
                 loadJournalRequest.getPageNumber()
         );
@@ -62,8 +62,11 @@ public class JournalGate {
      * @return
      */
     @RequestMapping(path = "/doFilter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SimpleResult<JournalDataResponse> doFilter(@RequestBody FilterRequest filterRequest) {
-        JournalDataDTO journalData = journalServiceImpl.doFilter(filterRequest.getSysName(), filterRequest.getItemList());
+    public SimpleResult<JournalDataResponse> doFilter(
+            @RequestHeader(value = "Authorization", defaultValue = "") String authorization,
+            @RequestBody FilterRequest filterRequest
+    ) {
+        JournalDataDTO journalData = journalServiceImpl.doFilter(authorization, filterRequest.getSysName(), filterRequest.getItemList());
         JournalDataResponse journalDataResponse = new JournalDataResponse(journalData);
         return new SimpleResult<>(
                 Status.OK
@@ -78,10 +81,13 @@ public class JournalGate {
      * @return
      */
     @RequestMapping(path = "/savePreset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SimpleResult savePreset(@RequestBody SavePresetRequest savePresetRequest) {
+    public SimpleResult savePreset(
+            @RequestHeader(value = "Authorization", defaultValue = "") String authorization,
+            @RequestBody SavePresetRequest savePresetRequest
+    ) {
         return new SimpleResult<>(
                 Status.OK
-                , journalServiceImpl.savePreset(savePresetRequest.getPresetDTO())
+                , journalServiceImpl.savePreset(authorization, savePresetRequest.getPresetDTO())
         );
     }
 
@@ -95,13 +101,17 @@ public class JournalGate {
             , method = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.GET}
             , produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public SimpleResult doButtonHandler(@RequestBody ButtonHandlerRequest buttonHandlerRequest) {
+    public SimpleResult doButtonHandler(
+            @RequestHeader(value = "Authorization", defaultValue = "") String authorization,
+            @RequestBody ButtonHandlerRequest buttonHandlerRequest) {
         JournalDataDTO journalData = journalServiceImpl.doButtonHandler(
+                authorization,
                 buttonHandlerRequest.getRequestMethod()
                 , buttonHandlerRequest.getJournalSysName()
                 , buttonHandlerRequest.getButtonAction()
                 , buttonHandlerRequest.getEntity()
-                , buttonHandlerRequest.getPageNumber());
+                , buttonHandlerRequest.getPageNumber()
+        );
         JournalDataResponse journalDataResponse = new JournalDataResponse(journalData);
 
         return new SimpleResult<>(

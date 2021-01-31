@@ -24,32 +24,40 @@ public interface JournalService {
     /**
      * Общая загрузка данных журнала по системному имени
      *
+     *
+     * @param authorization
      * @param sysName    системное имя журнала
      * @param pageNumber номер страницы
      * @return возвращает данные журнала
      */
-    JournalDataDTO loadJournalData(String sysName, int pageNumber);
+    JournalDataDTO loadJournalData(String authorization, String sysName, int pageNumber);
 
     /**
      * Метод фильтрации данных
      *
+     *
+     * @param authorization
      * @param journalSysName        системное имя журнала
      * @param journalFilterItemDTOList список фильтров
      * @return
      */
-    JournalDataDTO doFilter(String journalSysName, List<JournalFilterItemDTO> journalFilterItemDTOList);
+    JournalDataDTO doFilter(String authorization, String journalSysName, List<JournalFilterItemDTO> journalFilterItemDTOList);
 
     /**
      * Метод сохранения пресета
      *
+     *
+     * @param authorization
      * @param presetDTO новый пресет
      * @return
      */
-    List<PresetDTO> savePreset(PresetDTO presetDTO);
+    List<PresetDTO> savePreset(String authorization, PresetDTO presetDTO);
 
     /**
      * Вызов обработчика кнопки
      *
+     *
+     * @param authorization
      * @param requestMethod
      * @param journalSysName системное имя журнала, для которого вызывается кнопка
      * @param buttonAction   системное имя кнопки
@@ -58,5 +66,5 @@ public interface JournalService {
      *                       выполнения действия)
      * @return данные журнала на странице pageNumber
      */
-    JournalDataDTO doButtonHandler(RequestMethod requestMethod, String journalSysName, String buttonAction, Map<String, Object> entity, int pageNumber);
+    JournalDataDTO doButtonHandler(String authorization, RequestMethod requestMethod, String journalSysName, String buttonAction, Map<String, Object> entity, int pageNumber);
 }

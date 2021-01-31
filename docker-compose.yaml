@@ -5,7 +5,7 @@ services:
   gateway-service:
     container_name: gateway-service
     restart: always
-    image: greenfield0000/gateway-service:1.0.1
+    image: greenfield0000/gateway-service:1.0.2
     ports:
       - "8080:8080"
       - "9080:9080"
@@ -43,11 +43,12 @@ services:
       - "9083:9083"
     links:
       - central-db:central-db
+      - admin-service:admin-service
 
   #admin-service
   admin-service:
     container_name: admin-service
-    image: greenfield0000/admin-service:1.0.0
+    image: greenfield0000/admin-service:1.0.2
     ports:
       - "8084:8080"
     links:
