@@ -1,6 +1,28 @@
 version: "3.4"
 services:
- 
+
+  #gateway-service
+  gateway-service:
+    container_name: gateway-service
+    restart: always
+    image: greenfield0000/gateway-service:1.0.0
+    ports:
+      - "8080:8080"
+      - "9080:9080"
+    links:
+      - menu-service:menu-service
+      - journal-service:journal-service
+      - kladr-service:kladr-service
+
+  #auth-service
+  auth-service:
+    container_name: auth-service
+    image: greenfield0000/auth-service:1.0.0
+    ports:
+      - "8081:8080"
+    links:
+      - central-db:central-db
+
   #menu-service
   menu-service:
     container_name: menu-service
@@ -22,6 +44,16 @@ services:
     links:
       - central-db:central-db
 
+  #admin-service
+  admin-service:
+    container_name: admin-service
+    image: greenfield0000/admin-service:1.0.0
+    ports:
+      - "8084:8080"
+    links:
+      - central-db:central-db
+   
+
   # fias-kladr-service
   kladr-service:
     container_name: kladr-service
@@ -30,20 +62,6 @@ services:
     ports:
       - "9084:9084"
 
-
-  #gateway-service
-  gateway-service:
-    container_name: gateway-service
-    restart: always
-    image: greenfield0000/gateway-service:1.0.0
-    ports:
-      - "8080:8080"
-      - "9080:9080"
-    links:
-      - menu-service:menu-service
-      - journal-service:journal-service
-      - kladr-service:kladr-service
-  
   central-db:                                                                                                           
     container_name: central-db                                                                                          
     image: postgres:9.6                                                                                                 
